@@ -1,0 +1,7 @@
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\UnitTestCalculate\bin\Debug\UnitTestCalculate.dll
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\UnitTestCalculate\bin\Debug\UnitTestCalculate.pdb
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\UnitTestCalculate\bin\Debug\ASI.exe
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\UnitTestCalculate\bin\Debug\ASI.pdb
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\UnitTestCalculate\obj\Debug\UnitTestCalculate.csprojResolveAssemblyReference.cache
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\UnitTestCalculate\obj\Debug\UnitTestCalculate.dll
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\UnitTestCalculate\obj\Debug\UnitTestCalculate.pdb

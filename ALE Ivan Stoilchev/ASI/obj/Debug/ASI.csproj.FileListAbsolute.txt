@@ -1,0 +1,18 @@
+D:\Documents\Visual Studio 2015\Projects\ASI\ASI\bin\Debug\ASI.exe.config
+D:\Documents\Visual Studio 2015\Projects\ASI\ASI\bin\Debug\ASI.exe
+D:\Documents\Visual Studio 2015\Projects\ASI\ASI\bin\Debug\ASI.pdb
+D:\Documents\Visual Studio 2015\Projects\ASI\ASI\obj\Debug\ASI.csprojResolveAssemblyReference.cache
+D:\Documents\Visual Studio 2015\Projects\ASI\ASI\obj\Debug\ASI.Form1.resources
+D:\Documents\Visual Studio 2015\Projects\ASI\ASI\obj\Debug\ASI.Properties.Resources.resources
+D:\Documents\Visual Studio 2015\Projects\ASI\ASI\obj\Debug\ASI.csproj.GenerateResource.Cache
+D:\Documents\Visual Studio 2015\Projects\ASI\ASI\obj\Debug\ASI.exe
+D:\Documents\Visual Studio 2015\Projects\ASI\ASI\obj\Debug\ASI.pdb
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\ASI\bin\Debug\ASI.exe.config
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\ASI\obj\Debug\ASI.exe
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\ASI\obj\Debug\ASI.pdb
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\ASI\bin\Debug\ASI.exe
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\ASI\bin\Debug\ASI.pdb
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\ASI\obj\Debug\ASI.csprojResolveAssemblyReference.cache
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\ASI\obj\Debug\ASI.Form1.resources
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\ASI\obj\Debug\ASI.Properties.Resources.resources
+D:\Documents\Visual Studio 2015\Projects\ALE Ivan Stoilchev\ASI\obj\Debug\ASI.csproj.GenerateResource.Cache
