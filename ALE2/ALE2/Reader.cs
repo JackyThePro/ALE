@@ -16,6 +16,8 @@ namespace ALE2
         bool word = false;
         public List<Node> listerino;
 
+        public string Alpha { get => alpha; set => alpha = value; }
+
         public string GetWord(string t)
         {
             int Start = t.IndexOf(':');
@@ -29,7 +31,7 @@ namespace ALE2
             if (line.Contains("alphabet"))
             {
                 //Get the alphabet
-                alpha = GetWord(line);
+                Alpha = GetWord(line);
             }
             else if (line.Contains("states"))
             {
@@ -70,7 +72,7 @@ namespace ALE2
             else if (line.Contains("transitions"))
             {
                 trans = true;
-                if (alpha == "")
+                if (Alpha == "")
                 {
                     empty = true;
                 }
@@ -87,7 +89,7 @@ namespace ALE2
                 {
                     return "\tRight";
                 }
-                else return "\tWring";
+                else return "\tWrong";
             }
             else if (line.Contains("words"))
             {
@@ -97,7 +99,7 @@ namespace ALE2
             {
                 trans = false;
                 word = false;
-                alpha = new String(alpha.Distinct().ToArray());
+                Alpha = new String(Alpha.Distinct().ToArray());
                 //foreach (Transmission t in transmissions)
                 //{
                 //    Console.WriteLine(t.In.Stat + "," + t.Value + " --> " + t.Out.Stat);
@@ -140,7 +142,7 @@ namespace ALE2
                         }
                         if (empty && s[1] != "_")
                         {
-                            alpha += s[1];
+                            Alpha += s[1];
                         }
                     }
                 }
@@ -152,7 +154,7 @@ namespace ALE2
                 {
                     return "\tRight";
                 }
-                else return "\tWring";
+                else return "\tWrong";
             }
             return "";
         }
@@ -169,7 +171,7 @@ namespace ALE2
             bool check2 = true;
             foreach (State st in state)
             {
-                foreach (char c in alpha)
+                foreach (char c in Alpha)
                 {
                     bool check = false;
                     foreach (Transmission t in st.outgoing)
@@ -271,6 +273,7 @@ namespace ALE2
                     if (Char.IsLetter(c))
                     {
                         n.Letter = true;
+                        alpha += c;
                     }
                     foreach (Node i in listerino)
                     {
@@ -295,7 +298,7 @@ namespace ALE2
                         {
                             if (cid == i.Id)
                             {
-                                if (i.ChildOneId == 0 || i.ChildTwoId != 0 || i.Param == '~')
+                                if (i.ChildOneId == 0 || i.ChildTwoId != 0 || i.Param == '*')
                                 {
                                     cid = i.ParId;
                                 }
@@ -310,7 +313,88 @@ namespace ALE2
             }
             return listerino;
         }
+        
+        //Assignment 4
+        public string CheckFinite()
+        {
+            List<State> passed = new List<State>();
+            List<State> beforeFinal = new List<State>();
+            List<string> word = new List<string>();
+            if (state.Any())
+            {
+                if (StateRecursion(state.First(), false, false, passed, beforeFinal, word, ""))
+                {
+                    string info;
+                    info = "finite: y\nwords:\n";
+                    foreach (string s in word)
+                    {
+                        info += s;
+                    }
+                    info = info.Replace("_", "");
+                    return info;
+                    
+                }
+                else
+                {
+                    return "finite: n";
+                }
+            }
+            return "";
+        }
 
+        bool finite = true;
+        public bool StateRecursion(State stt, bool finalPassed, bool loop,List<State> passed, List<State> beforeFinal, List<string> words, string word)
+        {
+            bool check = false;
+            passed.Add(stt);
+            if (!finalPassed)
+            {
+            beforeFinal.Add(stt);
+            }
+            if (stt.Final == true)
+            {
+                finalPassed = true;
+            }
+            if (stt.Final && loop)
+            {
+                finite = false;
+                return finite;
+            }
+            if (stt.Final && !loop)
+            {
+                words.Add(word);
+            }
+            List<State> copy1 = passed.ToList();
+            List<State> copy2 = beforeFinal.ToList();
 
+            foreach (Transmission t in stt.outgoing)
+            {
+                foreach (State sta in passed)
+                {
+                    if (t.Out == sta)
+                    {
+                        loop = true;
+                        check = true;
+                    }
+                }
+                if (finalPassed)
+                {
+                    foreach (State sta in beforeFinal)
+                    {
+                        if (t.Out == sta)
+                        {
+                            finite = false;
+                            return finite;
+                        }
+                    }
+                }
+                if (!check)
+                {
+                    string g = word + t.Value;
+                    StateRecursion(t.Out, finalPassed, loop, copy1, copy2, words, g);
+                }
+            }
+            return finite;
+        }
     }
 }

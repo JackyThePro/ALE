@@ -111,7 +111,7 @@ namespace ALE2
             CreateTransition(lastChildOneIdCount, StateCount);
         }
 
-        private void CreateTransition(int startCount, char letter = '&')
+        private void CreateTransition(int startCount, char letter = '_')
         {
             var endState = new State((StateCount+1).ToString(),false,false);
             States.Add(endState);
@@ -119,12 +119,12 @@ namespace ALE2
             StateCount++;
         }
 
-        private void CreateTransition(int startIndex, int endIndex, char letter = '&')
+        private void CreateTransition(int startIndex, int endIndex, char letter = '_')
         {
             CreateTransition(startIndex, States[endIndex-1], letter);
         }
 
-        private void CreateTransition(int startIndex, State endState, char letter = '&')
+        private void CreateTransition(int startIndex, State endState, char letter = '_')
         {
             var transition = new Transmission(States[startIndex-1], endState, letter.ToString());
 

@@ -7,3 +7,13 @@ D:\Documents\Visual Studio 2015\Projects\ALE2\ALE2\bin\Debug\ALE2.exe
 D:\Documents\Visual Studio 2015\Projects\ALE2\ALE2\bin\Debug\ALE2.pdb
 D:\Documents\Visual Studio 2015\Projects\ALE2\ALE2\obj\Debug\ALE2.exe
 D:\Documents\Visual Studio 2015\Projects\ALE2\ALE2\obj\Debug\ALE2.pdb
+C:\Users\Ivan\Documents\GitHub\ALE\ALE2\ALE2\bin\Debug\ALE2.exe.config
+C:\Users\Ivan\Documents\GitHub\ALE\ALE2\ALE2\bin\Debug\ALE2.exe
+C:\Users\Ivan\Documents\GitHub\ALE\ALE2\ALE2\bin\Debug\ALE2.pdb
+C:\Users\Ivan\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.csprojAssemblyReference.cache
+C:\Users\Ivan\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.Form1.resources
+C:\Users\Ivan\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.Properties.Resources.resources
+C:\Users\Ivan\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.csproj.GenerateResource.cache
+C:\Users\Ivan\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.csproj.CoreCompileInputs.cache
+C:\Users\Ivan\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.exe
+C:\Users\Ivan\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.pdb

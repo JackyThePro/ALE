@@ -20,7 +20,6 @@ namespace ALE2
 
         private void button1_Click(object sender, EventArgs e)
         {
-            listBox1.Items.Clear();
             Reader r = new Reader();
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
@@ -29,6 +28,7 @@ namespace ALE2
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
+                listBox1.Items.Clear();
                 string FileName = openFileDialog1.FileName;
                 string text = "";
                 using (var streamReader = new StreamReader(FileName, Encoding.UTF8))
@@ -41,8 +41,10 @@ namespace ALE2
                     }
                 }
             }
+            listBox1.Items.Add("------------------------");
 
-            
+            listBox1.Items.AddRange(r.CheckFinite().Split('\n'));
+
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -65,13 +67,66 @@ namespace ALE2
 
             ndfa.Selectf(topNode);
             States.Last().Final = true;
+
+            //testing the output of NDFA tree
+            //foreach (State s in States)
+            //{
+            //    foreach (Transmission t in s.outgoing)
+            //    {
+            //        Console.WriteLine(t.In.Stat + "-->" + t.Value+ ", " + t.Out.Stat);
+            //    }
+            //}
+
+            //Create string for new file with NDFA
+            List<char> alphabet = new List<char>();
+            List<string> states = new List<string>();
+            List<string> final = new List<string>();
+
+            foreach (char c in r.Alpha)
+            {
+                alphabet.Add(c);
+            }
+
+            foreach (State s in States)
+            {
+                states.Add(s.Stat);
+                if (s.Final)
+                {
+                    final.Add(s.Stat);
+                }
+                
+            }
+            string alphabets = String.Join("", alphabet.ToArray());
+            string statess = String.Join(",", states.ToArray());
+            string finals = String.Join(",", final.ToArray());
+
+            string fileContent;
+            fileContent = "alphabet: " + alphabets + Environment.NewLine;
+            fileContent += "states: " + statess + Environment.NewLine;
+            fileContent += "states: " + finals + Environment.NewLine;
+            fileContent += "transitions:" + Environment.NewLine;
             foreach (State s in States)
             {
                 foreach (Transmission t in s.outgoing)
                 {
-                    Console.WriteLine(t.In.Stat + "-->" + t.Value+ ", " + t.Out.Stat);
+                    fileContent += t.In.Stat + "-->" + t.Value + ", " + t.Out.Stat + Environment.NewLine;
                 }
             }
+            fileContent += Environment.NewLine + "end.";
+
+            Console.WriteLine(fileContent);
+
+            // Choosing path
+            SaveFileDialog choofdlog = new SaveFileDialog();
+            choofdlog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            choofdlog.FilterIndex = 1;
+
+            if (choofdlog.ShowDialog() == DialogResult.OK)
+            {
+                string sFileName = choofdlog.FileName;
+                File.WriteAllText(sFileName, fileContent);
+            }
+
         }
     }
 }
