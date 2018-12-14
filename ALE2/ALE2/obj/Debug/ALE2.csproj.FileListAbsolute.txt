@@ -17,3 +17,12 @@ C:\Users\Ivan\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.csproj.GenerateResou
 C:\Users\Ivan\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.csproj.CoreCompileInputs.cache
 C:\Users\Ivan\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.exe
 C:\Users\Ivan\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.pdb
+D:\Documents\GitHub\ALE\ALE2\ALE2\bin\Debug\ALE2.exe.config
+D:\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.exe
+D:\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.pdb
+D:\Documents\GitHub\ALE\ALE2\ALE2\bin\Debug\ALE2.exe
+D:\Documents\GitHub\ALE\ALE2\ALE2\bin\Debug\ALE2.pdb
+D:\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.csprojResolveAssemblyReference.cache
+D:\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.Form1.resources
+D:\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.Properties.Resources.resources
+D:\Documents\GitHub\ALE\ALE2\ALE2\obj\Debug\ALE2.csproj.GenerateResource.Cache

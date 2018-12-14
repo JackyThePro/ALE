@@ -17,7 +17,18 @@ namespace ALE2
         bool word = false;
         public List<Node> listerino;
 
-        public string Alpha { get => alpha; set => alpha = value; }
+        public string Alpha
+        {
+            get
+            {
+                return alpha;
+            }
+
+            set
+            {
+                alpha = value;
+            }
+        }
 
         public string GetWord(string t)
         {
@@ -274,7 +285,7 @@ namespace ALE2
                     if (Char.IsLetter(c))
                     {
                         n.Letter = true;
-                        alpha += c;
+                        Alpha += c;
                     }
                     foreach (Node i in listerino)
                     {
@@ -419,7 +430,7 @@ namespace ALE2
                         //{
                         //    props = " [" + transition.pushdown_props + "]";
                         //}
-                        graph.WriteLine("\"" + st.Stat + "\" -> " + "\"" + tr.Value + "\"[label=\"" + props + "\"]");
+                        graph.WriteLine("\"" + st.Stat + "\" -> " + "\"" + tr.Out.Stat + "\"[label=\"" + tr.Value + "\"]");
                     }
                 }
 

@@ -24,7 +24,6 @@ namespace ALE2
             Reader r = new Reader();
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
-            openFileDialog1.InitialDirectory = "c:\\";
             openFileDialog1.RestoreDirectory = true;
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -49,14 +48,14 @@ namespace ALE2
             //GraphViz
             r.GraphVizGenerator("GenerateAutomata.dot");
 
-            Process dot = new Process();
+            //Process dot = new Process();
 
-            dot.StartInfo.FileName = "dot.exe";
-            dot.StartInfo.Arguments = "-Tpng -oGenerateAutomata.png GenerateAutomata.dot";
-            dot.StartInfo.CreateNoWindow = true;
-            dot.EnableRaisingEvents = true;
-            dot.Exited += (sender1, e1) => openFile(sender1, e1, "GenerateAutomata.png");
-            dot.Start();
+            //dot.StartInfo.FileName = "dot.exe";
+            //dot.StartInfo.Arguments = "-Tpng -oGenerateAutomata.png GenerateAutomata.dot";
+            //dot.StartInfo.CreateNoWindow = true;
+            //dot.EnableRaisingEvents = true;
+            //dot.Exited += (sender1, e1) => openFile(sender1, e1, "GenerateAutomata.png");
+            //dot.Start();
         }
 
         private void button2_Click(object sender, EventArgs e)
