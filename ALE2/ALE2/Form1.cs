@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Diagnostics;
 
 namespace ALE2
 {
@@ -45,6 +46,17 @@ namespace ALE2
 
             listBox1.Items.AddRange(r.CheckFinite().Split('\n'));
 
+            //GraphViz
+            r.GraphVizGenerator("GenerateAutomata.dot");
+
+            Process dot = new Process();
+
+            dot.StartInfo.FileName = "dot.exe";
+            dot.StartInfo.Arguments = "-Tpng -oGenerateAutomata.png GenerateAutomata.dot";
+            dot.StartInfo.CreateNoWindow = true;
+            dot.EnableRaisingEvents = true;
+            dot.Exited += (sender1, e1) => openFile(sender1, e1, "GenerateAutomata.png");
+            dot.Start();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -127,6 +139,20 @@ namespace ALE2
                 File.WriteAllText(sFileName, fileContent);
             }
 
+        }
+
+        public void openFile(object sender, EventArgs e, string name)
+        {
+            try
+            {
+                Process photoViewer = new Process();
+                photoViewer.StartInfo.FileName = name;
+                photoViewer.Start();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

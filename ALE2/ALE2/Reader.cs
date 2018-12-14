@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -318,21 +319,29 @@ namespace ALE2
         public string CheckFinite()
         {
             List<State> passed = new List<State>();
-            List<State> beforeFinal = new List<State>();
             List<string> word = new List<string>();
             if (state.Any())
             {
-                if (StateRecursion(state.First(), false, false, passed, beforeFinal, word, ""))
+                if (StateRecursion(state.First(), passed, word, ""))
                 {
                     string info;
+                    string g;
                     info = "finite: y\nwords:\n";
+                    word = word.Distinct().ToList();
                     foreach (string s in word)
                     {
-                        info += s;
+                        g = s.Replace("_", "");
+                        if (g != "")
+                        {
+                            info += g + "\n";
+                        }
+                        else
+                        {
+                            g = "&";
+                            info += g + "\n";
+                        }
                     }
-                    info = info.Replace("_", "");
-                    return info;
-                    
+                    return info;       
                 }
                 else
                 {
@@ -343,29 +352,14 @@ namespace ALE2
         }
 
         bool finite = true;
-        public bool StateRecursion(State stt, bool finalPassed, bool loop,List<State> passed, List<State> beforeFinal, List<string> words, string word)
+        public bool StateRecursion(State stt,List<State> passed, List<string> words, string word)
         {
-            bool check = false;
             passed.Add(stt);
-            if (!finalPassed)
-            {
-            beforeFinal.Add(stt);
-            }
-            if (stt.Final == true)
-            {
-                finalPassed = true;
-            }
-            if (stt.Final && loop)
-            {
-                finite = false;
-                return finite;
-            }
-            if (stt.Final && !loop)
+            if (stt.Final)
             {
                 words.Add(word);
             }
             List<State> copy1 = passed.ToList();
-            List<State> copy2 = beforeFinal.ToList();
 
             foreach (Transmission t in stt.outgoing)
             {
@@ -373,28 +367,65 @@ namespace ALE2
                 {
                     if (t.Out == sta)
                     {
-                        loop = true;
-                        check = true;
+                        finite = false;
+                        return finite;
                     }
                 }
-                if (finalPassed)
-                {
-                    foreach (State sta in beforeFinal)
-                    {
-                        if (t.Out == sta)
-                        {
-                            finite = false;
-                            return finite;
-                        }
-                    }
-                }
-                if (!check)
-                {
-                    string g = word + t.Value;
-                    StateRecursion(t.Out, finalPassed, loop, copy1, copy2, words, g);
-                }
+                string g = word + t.Value;
+                StateRecursion(t.Out, copy1, words, g);
             }
+            passed.RemoveAt(passed.Count - 1);
             return finite;
+        }
+
+        public void GraphVizGenerator(string fileName)
+        {
+            string FileName = fileName;
+
+            using (StreamWriter graph = File.CreateText(FileName))
+            {
+                graph.WriteLine("digraph myAutomaton {");
+                graph.WriteLine("  rankdir=LR;");
+                graph.WriteLine("\"\" [shape=none]");
+
+
+                foreach (State st in state)
+                {
+                    if (st.Final)
+                    {
+                        graph.WriteLine("\"" + st.Stat + "\" [shape=doublecircle]");
+                    }
+                    else
+                    {
+                        graph.WriteLine("\"" + st.Stat + "\" [shape=circle]");
+                    }
+                }
+                graph.WriteLine("");
+
+                foreach (State st in state)
+                {
+                    if (st == state.First())
+                    {
+                        graph.WriteLine("\"\" -> " + "\"" + st.Stat + "\"");
+                    }
+                }
+
+                foreach (State st in state)
+                {
+                    foreach (Transmission tr in st.outgoing)
+                    {
+                        string props = "";
+                        //if (tr.pushdown_props != null)
+                        //{
+                        //    props = " [" + transition.pushdown_props + "]";
+                        //}
+                        graph.WriteLine("\"" + st.Stat + "\" -> " + "\"" + tr.Value + "\"[label=\"" + props + "\"]");
+                    }
+                }
+
+                graph.WriteLine("}");
+            }
+
         }
     }
 }
