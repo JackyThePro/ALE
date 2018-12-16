@@ -391,7 +391,7 @@ namespace ALE2
 
         public void GraphVizGenerator(string fileName)
         {
-            string FileName = fileName;
+            string FileName =  fileName;
 
             using (StreamWriter graph = File.CreateText(FileName))
             {
@@ -425,7 +425,7 @@ namespace ALE2
                 {
                     foreach (Transmission tr in st.outgoing)
                     {
-                        string props = "";
+                        //string props = "";
                         //if (tr.pushdown_props != null)
                         //{
                         //    props = " [" + transition.pushdown_props + "]";

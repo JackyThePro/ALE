@@ -40,22 +40,22 @@ namespace ALE2
                         listBox1.Items.Add(line + r.ReadFile(text));
                     }
                 }
+
+                listBox1.Items.Add("------------------------");
+
+                listBox1.Items.AddRange(r.CheckFinite().Split('\n'));
+
+                //GraphViz
+                r.GraphVizGenerator("GenerateAutomata.dot");
+
+                Process dot = new Process();
+                dot.StartInfo.FileName = "dot.exe";
+                dot.StartInfo.Arguments = "-Tpng -oGenerateAutomata.png GenerateAutomata.dot";
+                dot.StartInfo.CreateNoWindow = true;
+                dot.EnableRaisingEvents = true;
+                dot.Exited += (sender1, e1) => EventCheker(sender1, e1, "GenerateAutomata.png");
+                dot.Start();
             }
-            listBox1.Items.Add("------------------------");
-
-            listBox1.Items.AddRange(r.CheckFinite().Split('\n'));
-
-            //GraphViz
-            r.GraphVizGenerator("GenerateAutomata.dot");
-
-            //Process dot = new Process();
-
-            //dot.StartInfo.FileName = "dot.exe";
-            //dot.StartInfo.Arguments = "-Tpng -oGenerateAutomata.png GenerateAutomata.dot";
-            //dot.StartInfo.CreateNoWindow = true;
-            //dot.EnableRaisingEvents = true;
-            //dot.Exited += (sender1, e1) => openFile(sender1, e1, "GenerateAutomata.png");
-            //dot.Start();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -140,13 +140,13 @@ namespace ALE2
 
         }
 
-        public void openFile(object sender, EventArgs e, string name)
+        public void EventCheker(object sender, EventArgs e, string name)
         {
             try
             {
-                Process photoViewer = new Process();
-                photoViewer.StartInfo.FileName = name;
-                photoViewer.Start();
+                Process p = new Process();
+                p.StartInfo.FileName = name;
+                p.Start();
             }
             catch (Exception ex)
             {
