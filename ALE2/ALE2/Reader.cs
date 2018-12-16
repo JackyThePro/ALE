@@ -123,7 +123,7 @@ namespace ALE2
                 if (line != "")
                 {
                     List<string> s = line.Split(',').ToList();
-                    Regex r = new Regex("^[a-zA-Z_]*$");
+                    Regex r = new Regex("^[a-zA-Z&]*$");
                     if (r.IsMatch(s[1]))
                     {
                         State sin = null;
@@ -152,7 +152,7 @@ namespace ALE2
                                 ss.incoming.Add(t);
                             }
                         }
-                        if (empty && s[1] != "_")
+                        if (empty && s[1] != "&")
                         {
                             Alpha += s[1];
                         }
@@ -232,7 +232,7 @@ namespace ALE2
             {
                 foreach (Transmission t in st.outgoing)
                 {
-                    if (t.Value == "_")
+                    if (t.Value == "&")
                     {
                         if (RecWord(s, t.Out, con))
                         {
@@ -253,7 +253,7 @@ namespace ALE2
                         return true;
                     }
                 }
-                else if (t.Value == "_")
+                else if (t.Value == "&")
                 {
                     if (RecWord(s, t.Out, con))
                     {
@@ -341,7 +341,7 @@ namespace ALE2
                     word = word.Distinct().ToList();
                     foreach (string s in word)
                     {
-                        g = s.Replace("_", "");
+                        g = s.Replace("&", "");
                         if (g != "")
                         {
                             info += g + "\n";

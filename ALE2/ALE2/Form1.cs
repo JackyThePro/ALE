@@ -37,6 +37,7 @@ namespace ALE2
                     while ((line = streamReader.ReadLine()) != null)
                     {
                         text = line.Replace(" ", "");
+                        text = text.Replace("_", "&");
                         listBox1.Items.Add(line + r.ReadFile(text));
                     }
                 }
