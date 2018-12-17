@@ -1,0 +1,22 @@
+alphabet: ab
+states: A,A,B,A,B,C,A,C,A,B,C,D,A,B,D,A,C,D,A,D
+final: A,B,C,D,A,B,D,A,C,D,A,D
+transitions:
+A-->a, A,B
+A-->b, A
+A,B-->a, A,B,C
+A,B-->b, A,C
+A,B,C-->a, A,B,C,D
+A,B,C-->b, A,C
+A,C-->a, A,B,D
+A,C-->b, A
+A,B,C,D-->a, A,B,C,D
+A,B,C,D-->b, A,C,D
+A,B,D-->a, A,B,C,D
+A,B,D-->b, A,C,D
+A,C,D-->a, A,B,D
+A,C,D-->b, A,D
+A,D-->a, A,B,D
+A,D-->b, A,D
+
+end.

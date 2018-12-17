@@ -13,7 +13,18 @@ namespace ALE2
 
         public void PowersetTable (List<State> states,string alpha,out List<State> ss)
         {
-            subsets.Add(states[0]);
+            State stat = states[0];
+            foreach (Transmission t in states[0].outgoing)
+            {
+                if (t.Value == "&")
+                {
+                    bool foo = states[0].Final;
+                    string s = states[0].Stat;
+                    EpsilonRecursion(s, stat, foo);
+                    stat = new State(s, foo, true);
+                }
+            }
+            subsets.Add(stat);
             bool sink = false;
             //this for is going through all subsets states
             for (int i = 0; i < subsets.Count; i++)
@@ -47,10 +58,12 @@ namespace ALE2
                                         {
                                             newStateName = t.Out.Stat;
                                             firstCharInString = false;
+                                            EpsilonRecursion(newStateName, t.Out, finalS);
                                         }
-                                        else
+                                        else if (!newStateName.Contains(t.Out.Stat))
                                         {
                                             newStateName += "," + t.Out.Stat;
+                                            EpsilonRecursion(newStateName, t.Out, finalS);
                                         }
                                     }
                                 }
@@ -95,10 +108,6 @@ namespace ALE2
                             transmissions.Add(transmission);
                         }
                     }
-                    else
-                    {
-                        
-                    }
                 }
             }
             ConnectStateTransitions();
@@ -121,6 +130,22 @@ namespace ALE2
                     {
                         state.incoming.Add(transmission);
                     }
+                }
+            }
+        }
+
+        private void EpsilonRecursion(string name, State state, bool final)
+        {
+            foreach (Transmission t in state.outgoing)
+            {
+                if (t.Value == "&")
+                {
+                    name += "," + t.Out.Stat;
+                    if (t.Out.Final)
+                    {
+                        final = true;
+                    }
+                    EpsilonRecursion(name, t.Out, final);
                 }
             }
         }
