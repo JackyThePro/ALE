@@ -242,26 +242,33 @@ namespace ALE2
                 }
                     return false;
             }
-            char c = s[con];
-            foreach (Transmission t in st.outgoing)
+            try
             {
-                if (t.Value == c.ToString())
+                char c = s[con];
+                foreach (Transmission t in st.outgoing)
                 {
-                    con++;
-                    if (RecWord(s, t.Out, con))
+                    if (t.Value == c.ToString())
                     {
-                        return true;
+                        con++;
+                        if (RecWord(s, t.Out, con))
+                        {
+                            return true;
+                        }
+                    }
+                    else if (t.Value == "&")
+                    {
+                        if (RecWord(s, t.Out, con))
+                        {
+                            return true;
+                        }
                     }
                 }
-                else if (t.Value == "&")
-                {
-                    if (RecWord(s, t.Out, con))
-                    {
-                        return true;
-                    }
-                }
+                return false;
             }
-            return false;
+            catch (IndexOutOfRangeException)
+            {
+                return false;
+            }
         }
 
         public List<Node> ReadFormula(string input)
@@ -389,6 +396,14 @@ namespace ALE2
             return finite;
         }
 
+        //assignment 5
+        public List<State> NdfaToDfa ()
+        {
+            List<State> subset = new List<State>();
+            PowersetConstructor p = new PowersetConstructor();
+            p.PowersetTable(state,Alpha, out subset);
+            return subset;
+        }
         public void GraphVizGenerator(string fileName)
         {
             string FileName =  fileName;

@@ -90,6 +90,12 @@ namespace ALE2
             //}
 
             //Create string for new file with NDFA
+            FileForFiniteAutomata(r, States);
+
+        }
+
+        public void FileForFiniteAutomata(Reader r, List<State> States)
+        {
             List<char> alphabet = new List<char>();
             List<string> states = new List<string>();
             List<string> final = new List<string>();
@@ -106,7 +112,7 @@ namespace ALE2
                 {
                     final.Add(s.Stat);
                 }
-                
+
             }
             string alphabets = String.Join("", alphabet.ToArray());
             string statess = String.Join(",", states.ToArray());
@@ -115,7 +121,7 @@ namespace ALE2
             string fileContent;
             fileContent = "alphabet: " + alphabets + Environment.NewLine;
             fileContent += "states: " + statess + Environment.NewLine;
-            fileContent += "states: " + finals + Environment.NewLine;
+            fileContent += "final: " + finals + Environment.NewLine;
             fileContent += "transitions:" + Environment.NewLine;
             foreach (State s in States)
             {
@@ -138,7 +144,6 @@ namespace ALE2
                 string sFileName = choofdlog.FileName;
                 File.WriteAllText(sFileName, fileContent);
             }
-
         }
 
         public void EventCheker(object sender, EventArgs e, string name)
@@ -152,6 +157,40 @@ namespace ALE2
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Reader r = new Reader();
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.RestoreDirectory = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                listBox1.Items.Clear();
+                string FileName = openFileDialog1.FileName;
+                string text = "";
+                using (var streamReader = new StreamReader(FileName, Encoding.UTF8))
+                {
+                    string line;
+                    while ((line = streamReader.ReadLine()) != null)
+                    {
+                        text = line.Replace(" ", "");
+                        text = text.Replace("_", "&");
+                        r.ReadFile(text);
+                    }
+                }
+
+                if (!r.CheckDFA())
+                {
+                    FileForFiniteAutomata(r, r.NdfaToDfa());
+                }
+                else
+                {
+                    MessageBox.Show("It is already dfa");
+                }
             }
         }
     }

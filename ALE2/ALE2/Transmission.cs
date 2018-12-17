@@ -12,7 +12,9 @@ namespace ALE2
         State sout;
         string value;
 
+        //coming from this state
         public State In { get { return sin; } set { sin = value; } }
+        //going to this state
         public State Out { get { return sout; } set { sout = value; } }
         public string Value { get { return value; } set { this.value = value; } }
 

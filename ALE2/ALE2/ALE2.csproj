@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="NDFA.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="PowersetConstructor.cs" />
     <Compile Include="Reader.cs" />
     <Compile Include="State.cs" />
     <Compile Include="Transmission.cs" />
