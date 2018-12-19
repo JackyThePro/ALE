@@ -402,6 +402,15 @@ namespace ALE2
             List<State> subset = new List<State>();
             PowersetConstructor p = new PowersetConstructor();
             p.PowersetTable(state,Alpha, out subset);
+            //int i = 1;
+            //foreach (State s in subset)
+            //{
+            //    if (s.Stat != "sink")
+            //    {
+            //        s.Stat = i.ToString();
+            //        i++;
+            //    }
+            //}
             return subset;
         }
         public void GraphVizGenerator(string fileName)

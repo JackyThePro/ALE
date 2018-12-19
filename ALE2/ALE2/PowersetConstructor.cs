@@ -18,9 +18,10 @@ namespace ALE2
             {
                 if (t.Value == "&")
                 {
-                    bool foo = states[0].Final;
-                    string s = states[0].Stat;
-                    EpsilonRecursion(s, stat, foo);
+                    bool foo;
+                    string s;
+                    EpsilonRecursion("", stat, states[0].Final, out s, out foo);
+                    s = s.Substring(1);
                     stat = new State(s, foo, true);
                 }
             }
@@ -29,13 +30,35 @@ namespace ALE2
             //this for is going through all subsets states
             for (int i = 0; i < subsets.Count; i++)
             {
+                List<string> temp = subsets[i].Stat.Split(',').ToList();
+                string stt = subsets[i].Stat.ToString();
+                bool fooo;
+                foreach (string stateName in temp)
+                {
+                    //going through every state in the normal list of states
+                    foreach (State st in states)
+                    {
+                        if (st.Stat == stateName)
+                        {
+                            //going through every transition that is going out of the state
+                            foreach (Transmission t in st.outgoing)
+                            {
+                                if (t.Value == "&")
+                                {
+                                    EpsilonRecursion(stt, t.Out, false, out stt, out fooo);
+                                }
+                            }
+                        }
+                    }
+                }
+                State stWithEpsilon = new State(stt, false, false);
                 //going through every char in the alphabet
                 foreach (char c in alpha)
                 {
                     string newStateName = "";
                     bool firstCharInString = true;
+                    List<string> stateNames = stWithEpsilon.Stat.Split(',').ToList();
                     bool finalS = false;
-                    List<string> stateNames = subsets[i].Stat.Split(',').ToList();
                     bool inList = false;
                     //going through every state in the subset of states
                     foreach (string stateName in stateNames)
@@ -57,13 +80,13 @@ namespace ALE2
                                         if(firstCharInString)
                                         {
                                             newStateName = t.Out.Stat;
+                                            EpsilonRecursion(newStateName, t.Out, finalS, out newStateName, out finalS);
                                             firstCharInString = false;
-                                            EpsilonRecursion(newStateName, t.Out, finalS);
                                         }
                                         else if (!newStateName.Contains(t.Out.Stat))
                                         {
                                             newStateName += "," + t.Out.Stat;
-                                            EpsilonRecursion(newStateName, t.Out, finalS);
+                                            EpsilonRecursion(newStateName, t.Out, finalS, out newStateName, out finalS);
                                         }
                                     }
                                 }
@@ -134,20 +157,28 @@ namespace ALE2
             }
         }
 
-        private void EpsilonRecursion(string name, State state, bool final)
+        private void EpsilonRecursion(string name, State state, bool final, out string statename, out bool finall)
         {
+            statename = "";
+            finall = false;
+            if (!name.Contains(state.Stat))
+            {
+                name += "," + state.Stat;
+            }
+            if (state.Final)
+            {
+                final = true;
+            }
+            statename = name;
+            finall = final;
             foreach (Transmission t in state.outgoing)
             {
                 if (t.Value == "&")
                 {
-                    name += "," + t.Out.Stat;
-                    if (t.Out.Final)
-                    {
-                        final = true;
-                    }
-                    EpsilonRecursion(name, t.Out, final);
+                    EpsilonRecursion(name, t.Out, final, out statename, out finall);
                 }
             }
+
         }
     }
 }
