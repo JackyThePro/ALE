@@ -245,11 +245,11 @@ namespace ALE2
             try
             {
                 char c = s[con];
+                con++;
                 foreach (Transmission t in st.outgoing)
                 {
                     if (t.Value == c.ToString())
                     {
-                        con++;
                         if (RecWord(s, t.Out, con))
                         {
                             return true;
@@ -402,17 +402,20 @@ namespace ALE2
             List<State> subset = new List<State>();
             PowersetConstructor p = new PowersetConstructor();
             p.PowersetTable(state,Alpha, out subset);
-            //int i = 1;
-            //foreach (State s in subset)
-            //{
-            //    if (s.Stat != "sink")
-            //    {
-            //        s.Stat = i.ToString();
-            //        i++;
-            //    }
-            //}
+            state = p.subsets.ToList();
+            transmissions = p.transmissions.ToList();
+            int i = 1;
+            foreach (State s in subset)
+            {
+                if (s.Stat != "sink")
+                {
+                    s.Stat = i.ToString();
+                    i++;
+                }
+            }
             return subset;
         }
+
         public void GraphVizGenerator(string fileName)
         {
             string FileName =  fileName;

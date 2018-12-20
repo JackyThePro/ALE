@@ -8,8 +8,8 @@ namespace ALE2
 {
     class PowersetConstructor
     {
-        List<State> subsets = new List<State>();
-        List<Transmission> transmissions = new List<Transmission>();
+        public List<State> subsets = new List<State>();
+        public List<Transmission> transmissions = new List<Transmission>();
 
         public void PowersetTable (List<State> states,string alpha,out List<State> ss)
         {
@@ -93,14 +93,12 @@ namespace ALE2
                             }
                         }
                     }
-                    foreach (State sss in subsets)
+                    State sss;
+                    if (NameChecker(newStateName, out sss))
                     {
-                        if (newStateName == sss.Stat)
-                        {
-                            inList = true;
-                            Transmission transmission = new Transmission(subsets[i], sss, c.ToString());
-                            transmissions.Add(transmission);
-                        }
+                        inList = true;
+                        Transmission transmission = new Transmission(subsets[i], sss, c.ToString());
+                        transmissions.Add(transmission);
                     }
                     if (!inList)
                     {
@@ -178,7 +176,31 @@ namespace ALE2
                     EpsilonRecursion(name, t.Out, final, out statename, out finall);
                 }
             }
+        }
 
+        public bool NameChecker(string s, out State st)
+        {
+            bool contains;
+            foreach (State name in subsets)
+            {
+                contains = true;
+                List<string> letters = name.Stat.Split(',').ToList();
+                foreach (string letter in letters)
+                {
+                    if (!s.Contains(letter))
+                    {
+                        contains = false;
+                        break;
+                    }
+                }
+                if (contains)
+                {
+                    st = name;
+                    return true;
+                }
+            }
+            st = new State("", false, false);
+            return false;
         }
     }
 }
