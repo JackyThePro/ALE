@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,11 +12,13 @@ namespace ALE2
     public class Reader
     {
         string alpha;
+        string stack;
         List<State> state = new List<State>();
         List<Transmission> transmissions = new List<Transmission>();
         bool trans = false;
         bool word = false;
         public List<Node> listerino;
+        Stack PDAStack = new Stack();
 
         public string Alpha
         {
@@ -27,6 +30,19 @@ namespace ALE2
             set
             {
                 alpha = value;
+            }
+        }
+
+        public string Stack
+        {
+            get
+            {
+                return stack;
+            }
+
+            set
+            {
+                stack = value;
             }
         }
 
@@ -44,6 +60,10 @@ namespace ALE2
             {
                 //Get the alphabet
                 Alpha = GetWord(line);
+            }
+            else if (line.Contains("stack"))
+            {
+                Stack = GetWord(line);
             }
             else if (line.Contains("states"))
             {
@@ -119,6 +139,18 @@ namespace ALE2
             }
             else if (trans)
             {
+                string stackremove = "";
+                string stackadd = "";
+                if (line.Contains("["))
+                {
+                    string stackItems;
+                    int Start = line.IndexOf('[');
+                    int End = line.IndexOf(']');
+                    stackItems = line.Substring(Start + 1, End - Start - 1);
+                    stackremove = stackItems.Substring(0, 1);
+                    stackadd = stackItems.Substring(2);
+                    line = line.Replace("[" + stackItems + "]", "");
+                }
                 line = line.Replace("-->", ",");
                 if (line != "")
                 {
@@ -140,6 +172,11 @@ namespace ALE2
                             }
                         }
                         Transmission t = new Transmission(sin, sout, s[1]);
+                        if (stackadd != "" && stackremove != "")
+                        {
+                            t.Sremove = stackremove;
+                            t.Sadd = stackadd;
+                        }
                         transmissions.Add(t);
                         foreach (State ss in state)
                         {
@@ -215,11 +252,22 @@ namespace ALE2
             }
             else isword = false;
 
-            if (RecWord(w, state[0], 0) == isword)
+            if (stack == "")
             {
-                return true;
+                if (RecWord(w, state[0], 0) == isword)
+                {
+                    return true;
+                }
             }
-            else return false;
+            else
+            {
+                if (RecWordPDA(w, state[0], 0) == isword)
+                {
+                    PDAStack.Clear();
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool RecWord(string s, State st, int con)
@@ -416,6 +464,110 @@ namespace ALE2
             return subset;
         }
 
+        //assignment 6
+        public bool RecWordPDA(string s, State st, int con)
+        {
+            if (con == s.Length && st.Final && PDAStack.Count == 0)
+            {
+                return true;
+            }
+            if (con > s.Length)
+            {
+                return false;
+            }
+            char c;
+            try
+            {
+                c = s[con];
+            }
+            catch (IndexOutOfRangeException)
+            {
+                c = '\0';
+            }
+            foreach (Transmission t in st.outgoing)
+            {
+                if (PDAStack.Count != 0)
+                {
+                    if (t.Value == c.ToString() && t.Sremove == PDAStack.Peek().ToString())
+                    {
+                        if (t.Sadd != "" && t.Sadd != "&")
+                        {
+                            PDAStack.Push(t.Sadd);
+                        }
+                        PDAStack.Pop();
+                        if (RecWordPDA(s, t.Out, ++con))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            foreach (Transmission t in st.outgoing)
+            {
+                if (t.Value == c.ToString() && (t.Sremove == "" || t.Sremove == "&"))
+                {
+                    if (t.Sadd != "" && t.Sadd != "&")
+                    {
+                        PDAStack.Push(t.Sadd);
+                    }
+                    if (RecWordPDA(s, t.Out, ++con))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            foreach (Transmission t in st.outgoing)
+            {
+                if (PDAStack.Count != 0)
+                {
+                    if (t.Value == "&" && t.Sremove == PDAStack.Peek().ToString())
+                    {
+                        if (t.Sadd != "" && t.Sadd != "&")
+                        {
+                            PDAStack.Push(t.Sadd);
+                        }
+                        PDAStack.Pop();
+                        if (RecWordPDA(s, t.Out, con))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            foreach (Transmission t in st.outgoing)
+            {
+                if (t.Value == "&" && (t.Sremove == "" || t.Sremove == "&"))
+                {
+                    if (t.Sadd != "" && t.Sadd != "&")
+                    {
+                        PDAStack.Push(t.Sadd);
+                    }
+                    if (RecWordPDA(s, t.Out, con))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+
+
         public void GraphVizGenerator(string fileName)
         {
             string FileName =  fileName;
@@ -450,14 +602,26 @@ namespace ALE2
 
                 foreach (State st in state)
                 {
-                    foreach (Transmission tr in st.outgoing)
+                    if (stack == "")
                     {
-                        //string props = "";
-                        //if (tr.pushdown_props != null)
-                        //{
-                        //    props = " [" + transition.pushdown_props + "]";
-                        //}
-                        graph.WriteLine("\"" + st.Stat + "\" -> " + "\"" + tr.Out.Stat + "\"[label=\"" + tr.Value + "\"]");
+                        foreach (Transmission tr in st.outgoing)
+                        {
+                            graph.WriteLine("\"" + st.Stat + "\" -> " + "\"" + tr.Out.Stat + "\"[label=\"" + tr.Value + "\"]");
+                        }
+                    }
+                    else
+                    {
+                        foreach (Transmission tr in st.outgoing)
+                        {
+                            if (tr.Sadd == "" && tr.Sremove == "")
+                            {
+                                graph.WriteLine("\"" + st.Stat + "\" -> " + "\"" + tr.Out.Stat + "\"[label=\"" + tr.Value + "\"]");
+                            }
+                            else
+                            {
+                                graph.WriteLine("\"" + st.Stat + "\" -> " + "\"" + tr.Out.Stat + "\"[label=\"" + tr.Value + " [" + tr.Sremove +"/"+ tr.Sadd +"]"+ "\"]");
+                            }
+                        }
                     }
                 }
 
